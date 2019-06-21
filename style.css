@@ -70,3 +70,44 @@ ul.bo-slider {
 .selected, .bo-dot:hover {
   background-color: #717171;
 }
+
+/* Animations
+Fading */
+
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  -moz-animation-name: fade;
+  -moz-animation-duration: 1.5;
+  -ms-animation-name: fade;
+  -ms-animation-duration: 1.5;
+  -o-animation-name: fade;
+  -o-animation-duration: 1.5;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+@-moz-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+@-ms-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+@-o-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
