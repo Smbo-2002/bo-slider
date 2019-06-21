@@ -14,9 +14,17 @@
 	$.fn.boSlider = function( options ) {
 		// Merging options
 		var options = $.extend({}, defaultOpt, options);
+
 		// Initializing slider
 		initSlider(options, this);
+
+		// Adding click events
 		addEvents();
+
+		// Autoplay if true
+		if (options.slideShow == true) {
+			setTimeout(slider.autoPlay.bind(slider), options.interval);
+		}
 
 		return $(".bo-slider");
 	};
@@ -41,9 +49,18 @@
 			var elements = "";
 			for (var i = 0; i < slides.length; i++) {
 				var active = i == 0 ? 'active' : '';
-				elements += "<div class='bo-slide fade " + active +"'>\n";
-				elements += "<img src='"+ slides[i]['data-url'] + "' alt='" + slides[i]['data-type'] +"'>\n";
-				elements += "</div>\n";
+				if (slides[i]['data-type'] == "image") { // Template for images
+					elements += "<div class='bo-slide " + options.animation + " " + active +"'>\n";
+					elements += "<img src='"+ slides[i]['data-url'] + "' alt='" + slides[i]['data-type'] +"'>\n";
+					elements += "</div>\n";
+				} else if (slides[i]['data-type'] == "video") { // Template for videos
+					elements += "<div class='bo-slide "+ options.animation + " " + active +"'>\n";
+					elements += "<video width='100%' height='500px'>\n";
+					elements += "<source src='" + slides[i]['data-url'] + "'>\n"
+					elements += "</video>\n";
+					elements += "<span class='play-button'>&#9654;</span>";
+					elements += "</div>\n";
+				}
 			}
 			elements += "<a class='bo-prev'>&#10094;</a>\n"; // Previous button
 			elements += "<a class='bo-next'>&#10095;</a>\n"; // Next button
@@ -73,7 +90,7 @@
 				n *= 1;
 				slider.active = n;
 				slider.showSlide();
-			})
+			});
 		});
 		$('.bo-prev').click(function () {
 			slider.active--;
@@ -83,6 +100,13 @@
 			slider.active++;
 			slider.showSlide();
 		});
+		slider.slides.forEach(function (value, index) {
+			if (value['data-type'] == 'video') {
+				$($(value['ref']).find(".play-button")[0]).click(function () {
+					slider.resumeVideo(index);
+				});
+			}
+		});
 	}
 
 	// Defining Slider class
@@ -90,16 +114,22 @@
 		this.active = 0;
 		this.options = options;
 		this.slides = slides;
+		this.playing = false;
 
 		this.showSlide = function () {
 			var i;
 			var dots = $('.bo-dots').children();
-			if (slider.active > this.slides.length-1) {
+			if (this.active > this.slides.length-1) {
 				this.active = 0;
 			}; 
-			if (slider.active < 0) {this.active = this.slides.length-1};
+			if (this.active < 0) {this.active = this.slides.length-1};
 			for (i = 0; i < this.slides.length; i++) {
-				$(slides[i]['ref']).removeClass("active");
+				if (this.slides[i]['data-type'] == "video") {
+					$(this.slides[i]['ref']).find("video")[0].pause();
+					$(this.slides[i]['ref']).find("video")[0].currentTime = 0;
+					$(this.slides[i]['ref']).find(".play-button").css("display", "block");
+				}
+				$(this.slides[i]['ref']).removeClass("active");
 			}
 			dots.each(function (index, value) {
 				$(value).removeClass("selected");
@@ -107,6 +137,37 @@
 
 			$(this.slides[this.active]['ref']).addClass('active'); 
 			$(dots[this.active]).addClass('selected');
+		}
+
+		this.autoPlay = function () {
+			if (this.options.slideShow == true && this.playing == false) {
+				this.active++;
+				this.showSlide();
+				setTimeout(this.autoPlay.bind(this), this.options.interval);
+			}
+		}
+
+		this.resumeVideo = function (n) {
+			var video = $(this.slides[n]['ref']).find("video")[0];
+			var button = $($(this.slides[n]['ref']).find(".play-button")[0]);
+			video.play();
+			button.css("display", "none");
+			this.playing = true;
+			var that = this;
+			$(video).click(function () {
+				video.pause();
+				button.css("display", "block");
+				$(video).unbind("click");
+				that.playing = false;
+				setTimeout(that.autoPlay.bind(that), options.interval);
+			});
+			$(video).bind("ended", function() {
+				video.currentTime = 0;
+				button.css("display", "block");
+				$(video).unbind("ended");
+				that.playing = false;
+				setTimeout(that.autoPlay.bind(that), options.interval);
+			});
 		}
 	}
 
