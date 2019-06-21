@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>bo-slider</title>
+</head>
+<body>
+	<ul class="bo-slider">
+		<li data-url="https://cdn.pixabay.com/photo/2017/11/21/22/10/desert-2969368_960_720.jpg" data-type="image"></li>
+		<li data-url="https://cdn.pixabay.com/photo/2018/08/14/09/59/mountains-3605113_960_720.jpg" data-type="image"></li>
+		<li data-url="https://cdn.pixabay.com/photo/2017/08/17/08/08/camp-2650359_960_720.jpg" data-type="image"></li>
+		<li data-url="https://cdn.pixabay.com/photo/2019/06/16/01/40/butterfly-4276772_960_720.jpg" data-type="image"></li>
+	</ul>
+	<script
+	type="text/javascript"
+	src="https://code.jquery.com/jquery-3.4.1.min.js"
+	integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+	crossorigin="anonymous"></script>
+	<script	type="text/javascript" src="script.js"></script>
+	<script type="text/javascript">
+		$('.bo-slider').boSlider({
+			slideShow: false,
+			interval: 2000,
+			animation: "slide"
+		});
+	</script>
+</body>
+</html>
