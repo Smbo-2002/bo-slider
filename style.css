@@ -1,0 +1,72 @@
+* {box-sizing:border-box}
+
+ul.bo-slider {
+	display: none;
+}
+
+.bo-slider {
+	position: relative;
+	width: 100%;
+}
+
+.bo-slider .bo-slide{
+	display: none;
+}
+
+.bo-slider .bo-slide.active {
+	display: block;
+}
+
+.bo-slider .bo-slide img {
+	height: 500px;
+	width: 100%;
+	object-fit: cover;
+}
+
+/* Navigation */
+.bo-slider .bo-next, .bo-prev {
+	cursor: pointer;
+	position: absolute;
+	top: 50%;
+	width: auto;
+	margin-top: -22px;
+	padding: 16px;
+	color: white;
+	font-weight: bold;
+	font-size: 18px;
+	transition: 0.6s ease;
+	border-radius: 0 3px 3px 0;
+	user-select: none;
+}
+
+.bo-slider .bo-prev {
+	left: 0;
+}
+
+.bo-slider .bo-next {
+	right: 0;
+}
+
+.bo-prev:hover, .bo-next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+.bo-dots {
+	margin-top: 10px;
+	text-align: center;
+}
+
+.bo-dot {
+	cursor: pointer;
+	height: 15px;
+	width: 15px;
+	margin: 0 2px;
+	background-color: #bbb;
+	border-radius: 50%;
+	display: inline-block;
+	transition: background-color 0.6s ease;
+}
+
+.selected, .bo-dot:hover {
+  background-color: #717171;
+}
